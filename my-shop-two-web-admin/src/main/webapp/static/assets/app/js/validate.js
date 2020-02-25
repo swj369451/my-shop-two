@@ -20,27 +20,20 @@
  min：10，输入值不能小于 10
 */
 /**
- * 函数对象
- * @type {{init}}
+ * Jquery Validate
+ *
  */
 var Validate = function () {
     /**
      * 定义一个函数，初始化jQuery validation
      * 这里定义的都是私有的
      */
-    var handleInitValidate = function () {
-        /**
-         * 自定义手机验证
-         */
-        $.validator.addMethod("mobile", function(value, element) {
-            var length = value.length;
-            var mobile =  /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/;
-            return this.optional(element) || (length == 11 && mobile.test(value));
-        }, "手机号码格式错误");
-        /**
-         * 表单验证
-         * @param formId
-         */
+    /**
+     * 初始化Jquery Validate
+     */
+    var handlerInitValidate = function () {
+
+
         $("#inputForm").validate({
             errorElement: 'span',
             errorClass: 'help-block',
@@ -51,12 +44,23 @@ var Validate = function () {
         });
     };
     /**
+     * 添加自定义的验证
+     */
+    var handlerInitCustomValidate = function () {
+        $.validator.addMethod("mobile", function(value, element) {
+            var length = value.length;
+            var mobile =  /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "手机号码格式错误");
+    };
+    /**
      * return里面的是公共的方法，外面可以访问的
      * {}是对象，所以里面只有属性
      */
     return{
         init:function () {
-            handleInitValidate();
+            handlerInitCustomValidate();
+            handlerInitValidate();
         }
     }
 }();

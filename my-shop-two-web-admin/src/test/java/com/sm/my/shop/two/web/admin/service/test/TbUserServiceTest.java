@@ -37,10 +37,6 @@ public class TbUserServiceTest {
         tbUserService.save(tbUser);
     }
 
-    @Test
-    public void testDeleteUser(){
-        tbUserService.deleteUser(37L);
-    }
 
     @Test
     public void testFindUserById(){
@@ -53,12 +49,6 @@ public class TbUserServiceTest {
         TbUser tbUser = tbUserService.findById(33L);
         tbUser.setUsername("滴");
         tbUserService.updateUser(tbUser);
-    }
-
-    @Test
-    public void testSelectByUserName(){
-        tbUserService.selectByUserName("gs");
-        System.out.println();
     }
 
     @Test

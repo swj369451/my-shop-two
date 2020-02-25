@@ -1,14 +1,12 @@
 var app = function () {
-    //bugsm var _icheck 在handleInitICheck中已经初始化了可是getCheckBox调用的时候显示为空所以不得不在定义的时候就初始化他
     var checkAllBtn;
     var checkBox ;
     var checkedIdArray;
+
     /**
-     * 私有方法，初始化ICheck
+     * 初始化ICheck
      */
-    var handleInitICheck = function () {
-        //input[type="checkbox"].minimal  选择所有的input标签，类型是checkbox，并且类中有minimal
-        //iCheck for checkbox and radio inputs
+    var handlerInitICheck = function () {
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass   : 'iradio_minimal-blue'
@@ -18,8 +16,10 @@ var app = function () {
         checkBox = $('input[type="checkbox"].minimal');
     };
 
-    //全选判断
-    var handleCheckBoxAll = function () {
+    /**
+     * 全选按钮点击事件
+     */
+    var handlerCheckBoxAll = function () {
         checkAllBtn.on("ifClicked",function (e) {
             if(e.target.checked){
                 //    返回true表示未选中
@@ -31,8 +31,11 @@ var app = function () {
         });
     };
 
-    //多选删除
-    var handleDeleteMulti = function (url) {
+    /**
+     * 多选删除操作
+     * @param url
+     */
+    var handlerDeleteMulti = function (url) {
         //初始化数组
         checkedIdArray = new Array();
         //判断是否选中并添加id到数组中
@@ -42,14 +45,16 @@ var app = function () {
                 checkedIdArray.push(_id)
             }
         });
+        //判断是否有选中
         if(checkedIdArray.length === 0){
+            //未选中任何一项
             $("#modal-message").html("请至少选择一项");
             $('#modal-save').bind('click',function () {
                 $("#modal-default").modal('hide');
             });
         }else{
+            //已有选中
             $("#modal-message").html("您确定要删除吗");
-
             $('#modal-save').bind('click',function () {
                 setTimeout(function () {
                     //删除的ajax请求
@@ -60,32 +65,42 @@ var app = function () {
                         "data":{"userIds":checkedIdArray.toString()},
                         "dataType":"JSON",
                         "success":function (data) {
-                            console.log(data);
+                            //在返回的数据中进行判断是否成功，并解除之前的模态框绑定
+                            $('#modal-save').unbind('click');
+                            $("#modal-message").html(data.message);
                             if(data.status === 200){
                                 //    成功执行
-                                window.location.reload();
+                                // window.location.reload();
+                                $('#modal-save').bind('click',function () {
+                                    $("#modal-default").modal('hide');
+                                    window.location.reload();
+                                });
                             }else{
                                 //    执行错误
-                                $("#modal-message").html(data.message);
-                                $('#modal-save').unbind('click');
                                 $('#modal-save').bind('click',function () {
                                     $("#modal-default").modal('hide');
                                 });
-                                $("#modal-default").modal('show');
+
                             }
+                            $("#modal-default").modal('show');
                         }
                     });
                 },500);
-                $("#modal-default").modal('hide');
+                // $("#modal-default").modal('hide');
             });
         }
         //显示模态框
         $("#modal-default").modal('show');
     };
 
-    //DataTables
-    var handleInitDateTables = function (url,columns) {
-        $('#dataTable').DataTable({
+    /**
+     * 初始化DataTables
+     * @param url 查询所发起的地址
+     * @param columns 列的数据
+     * @returns {*|jQuery}
+     */
+    var handlerInitDateTables = function (url,columns) {
+        var dataTables = $('#dataTable').DataTable({
             "lengthChange": false,
             "info": true,
             "ordering": false,
@@ -94,9 +109,12 @@ var app = function () {
             "serverSide": true,
             "ajax": {
                 "url": url,
-
+                "data": {
+                    args1: "username"
+                }
             },
             "columns":columns,
+            //国际化
             language: {
                 "sProcessing": "处理中...",
                 "sLengthMenu": "显示 _MENU_ 项结果",
@@ -121,15 +139,21 @@ var app = function () {
                     "sSortDescending": ": 以降序排列此列"
                 }
             },
+            //回调函数，每当翻一页的时候就执行icheck的样式更新
             "drawCallback": function( settings ) {
-                handleInitICheck();
-                handleCheckBoxAll();
+                handlerInitICheck();
+                handlerCheckBoxAll();
             }
-        })
+        });
+        return dataTables;
     };
 
-    //查看详情
-    var handleShowDetail = function (url) {
+    /**
+     * 显示详细信息
+     * 向模态框中填充jsp的数据
+     * @param url 请求路径
+     */
+    var handlerShowDetail = function (url) {
         $.ajax({
             url: url,
             type: 'get',
@@ -141,22 +165,37 @@ var app = function () {
         });
     };
 
+    var handlerDelete = function (url,id) {
+        // setTimeout(function () {
+            $.ajax({
+                "url": url,
+                "type": "POST",
+                "data": {"userIds": id},
+                success: function (data) {
+                    if(data.status === 200){
+                        window.location.reload();
+                    }
+                }
+            });
+        // },500);
+    };
+
     return{
         init:function () {
-            handleInitICheck();
-            handleCheckBoxAll();
-        },
-        getCheckBox:function () {
-            return checkBox;
+            handlerInitICheck();
+            handlerCheckBoxAll();
         },
         deleteMulti:function (url) {
-            handleDeleteMulti(url);
+            handlerDeleteMulti(url);
         },
         initDataTables:function (url,columns) {
-            handleInitDateTables(url,columns);
+            return handlerInitDateTables(url,columns);
         },
         showDetail:function (url) {
-          handleShowDetail(url);
+          handlerShowDetail(url);
+        },
+        deleteById:function (url,id) {
+            handlerDelete(url,id);
         }
     }
 }();

@@ -36,50 +36,42 @@
                     <h3 class="box-title">高级搜索</h3>
                 </div>
                 <!-- /.box-header -->
-                <!-- form start -->
-                <form:form id="inputForm" cssClass="form-horizontal" action="/user/search" method="post"
-                           modelAttribute="tbUser">
-                    <div class="box-body">
-                        <div class="row" style="margin-top: 20px">
-                            <div class="col-xs-3">
-                                <div class="form-group">
-                                    <label for="username" class="col-sm-2 control-label">用户</label>
+                <div class="box-body">
+                    <div class="row form-horizontal" style="margin-top: 20px">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">用户</label>
 
-                                    <div class="col-sm-10">
-                                            <%-- path="username" 等同于id,name,value都是等于usernmae--%>
-                                        <form:input cssClass="form-control" path="username" placeholder="请输入用户名"/>
-                                    </div>
+                                <div class="col-sm-10">
+                                    <input id="username" class="form-control" type="text" name="username" placeholder="请输入用户名">
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label for="phone" class="col-sm-2 control-label">手机</label>
+
+                                <div class="col-sm-10">
+                                    <input id="phone" class="form-control" type="text" name="phone" placeholder="请输入手机">
                                 </div>
                             </div>
-                            <div class="col-xs-3">
-                                <div class="form-group">
-                                    <label for="phone" class="col-sm-2 control-label">手机</label>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">邮箱</label>
 
-                                    <div class="col-sm-10">
-                                        <form:input cssClass="form-control" path="phone" placeholder="请输入手机"/>
-                                    </div>
+                                <div class="col-sm-10">
+                                    <input id="email" class="form-control" type="text" name="email" placeholder="请输入邮箱">
                                 </div>
                             </div>
-                            <div class="col-xs-3">
-                                <div class="form-group">
-                                    <label for="email" class="col-sm-2 control-label">邮箱</label>
-
-                                    <div class="col-sm-10">
-                                        <form:input cssClass="form-control" path="email" placeholder="请输入邮箱"/>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <button onclick="search()" class="btn btn-info pull-right">查询</button>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-10">
-                                    <button type="submit" class="btn btn-info pull-right">查询</button>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-                </form:form>
-                <!-- /.box-body -->
-                </form>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
@@ -122,24 +114,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <%--<c:forEach items="#{list}" var="user">--%>
-                                <%--<tr>--%>
-                                <%--<th><input id="${user.id}" type="checkbox" class="minimal"></th>--%>
-                                <%--<td>${user.id}</td>--%>
-                                <%--<td>${user.username}</td>--%>
-                                <%--<td>${user.phone}</td>--%>
-                                <%--<td>${user.email}</td>--%>
-                                <%--<td><fmt:formatDate value="${user.updated}" pattern="yyyy-MM-dd HH:mm:ss"/></td>--%>
-                                <%--<td>&nbsp;&nbsp;&nbsp;--%>
-                                <%--<a href="#" type="button" class="btn btn-sm btn-default"><i--%>
-                                <%--class="fa fa-search"></i>查看</a>&nbsp;&nbsp;&nbsp;--%>
-                                <%--<a href="#" type="button" class="btn btn-sm btn-primary"><i--%>
-                                <%--class="fa fa-edit"></i>编辑</a>&nbsp;&nbsp;&nbsp;--%>
-                                <%--<a href="#" type="button" class="btn btn-sm btn-danger"><i--%>
-                                <%--class="fa fa-remove"></i>删除</a>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-                                <%--</c:forEach>--%>
+
                                 </tbody>
                             </table>
                         </div>
@@ -175,26 +150,23 @@
         {
             "data": function (row, type, val, meta) {
                 var detailUrl = "/user/detail?userId="+row.id;
+                var deleteUrl = "/user/delete";
                 return '<button onclick="app.showDetail(\''+detailUrl+'\')" type="button" class="btn btn-sm btn-default"><i class="fa fa-search"></i>查看</button>&nbsp;&nbsp;&nbsp;' +
                     '<a href="/user/form?userId=' + row.id + '" type="button" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>编辑</a>&nbsp;&nbsp;&nbsp;' +
-                    '<a href="#" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i>删除</a>';
+                    '<button onclick="app.deleteById(\''+deleteUrl+'\','+row.id+')" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i>删除</button>';
             }
         },
     ];
-    app.initDataTables("/user/page", columns);
-    // '/user/detail?userId='+id
-    // function show(id) {
-    //     $.ajax({
-    //         url: '/user/detail?userId='+id,
-    //         type: 'get',
-    //         dataType: 'html',
-    //         success: function (data) {
-    //             $('#modal-body').html(data);
-    //             $('#modal-detail').modal('show');
-    //         }
-    //     });
-    //
-    // }
+    var dataTables = app.initDataTables("/user/page", columns);
+    function search() {
+        var param = {
+            "username":$('#username').val(),
+            "phone":$('#phone').val(),
+            "email":$('#email').val()
+        };
+        dataTables.settings()[0].ajax.data = param;
+        dataTables.ajax.reload();
+    }
 </script>
 </body>
 </html>

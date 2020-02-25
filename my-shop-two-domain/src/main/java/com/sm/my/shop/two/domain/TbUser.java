@@ -1,5 +1,6 @@
 package com.sm.my.shop.two.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sm.my.shop.two.commons.persistence.BaseEntity;
 
 public class TbUser extends BaseEntity{
@@ -17,6 +18,7 @@ public class TbUser extends BaseEntity{
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @RequestMapping("user")
@@ -64,10 +63,10 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public BaseResult delete(String userIds){
-        BaseResult result = BaseResult.fail("删除数据失败");
+        BaseResult result = BaseResult.fail("删除用户失败");
         if(StringUtils.isNoneBlank(userIds)){
             tbUserService.deleteMulti(userIds.split(","));
-            result=BaseResult.success("数据请求成功");
+            result=BaseResult.success("删除用户成功");
         }
         return result;
     }
@@ -98,30 +97,18 @@ public class UserController {
     }
 
     /**
-     * 用户搜索
-     * @param tbUser
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
-    public String search(TbUser tbUser,Model model){
-        List<TbUser> tbUsers = tbUserService.search(tbUser);
-        model.addAttribute("list",tbUsers);
-        return "/userList";
-    }
-
-    /**
      * 分页
      * @param request
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/page",method = RequestMethod.GET)
-    public PageInfo<TbUser> page(HttpServletRequest request){
-        String draw = request.getParameter("draw");
-        String start = request.getParameter("start");
-        String length = request.getParameter("length");
-        return tbUserService.page(start, length, Integer.parseInt(draw));
+    public PageInfo<TbUser> page(HttpServletRequest request,TbUser tbUser){
+        Integer draw = Integer.valueOf(request.getParameter("draw"));
+        Integer start = Integer.valueOf(request.getParameter("start"));
+        Integer length = Integer.valueOf(request.getParameter("length"));
+
+        return tbUserService.page(start, length, draw,tbUser);
     }
 
     @RequestMapping(value="/detail",method = RequestMethod.GET)

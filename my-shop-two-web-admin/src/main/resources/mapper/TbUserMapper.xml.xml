@@ -10,6 +10,7 @@
           a.created,
           a.updated
     </sql>
+
     <update id="updateUser">
         UPDATE
           tb_user AS a
@@ -22,9 +23,11 @@
         WHERE
           a.id = #{id}
     </update>
+
     <delete id="delete">
         DELETE FROM tb_user WHERE id = #{userId}
     </delete>
+
     <delete id="deleteMultiByIds">
         DELETE FROM tb_user
         WHERE id IN
@@ -34,12 +37,14 @@
             </foreach>
         </if>
     </delete>
+
     <select id="selectAll" resultType="TbUser">
         SELECT
           <include refid="tbUserColumns"/>
         FROM
           tb_user AS a
     </select>
+
     <select id="findById" resultType="TbUser">
         SELECT
           <include refid="tbUserColumns"/>
@@ -48,14 +53,7 @@
         WHERE
           a.id = #{userId}
     </select>
-    <select id="selectByUserName" resultType="TbUser">
-        SELECT
-          <include refid="tbUserColumns"/>
-        FROM
-          tb_user AS a
-        WHERE
-          a.username LIKE CONCAT('%',#{userName},'%')
-    </select>
+
     <select id="findByEmail" resultType="TbUser">
         SELECT
           <include refid="tbUserColumns"/>
@@ -64,14 +62,32 @@
         WHERE
           a.email = #{email}
     </select>
-    <select id="search" resultType="TbUser">
+
+    <select id="pageByLimit" resultType="TbUser" parameterType="java.util.Map">
         SELECT
         <include refid="tbUserColumns"/>
         FROM
         tb_user AS a
         <where>
+            <if test="tbUser.username != null and tbUser.username != ''">
+                AND a.username LIKE CONCAT('%',#{tbUser.username},'%')
+            </if>
+            <if test="tbUser.phone != null and tbUser.phone != ''">
+                AND a.phone LIKE CONCAT('%',#{tbUser.phone},'%')
+            </if>
+            <if test="tbUser.email != null and tbUser.email != ''">
+                AND a.email LIKE CONCAT('%',#{tbUser.email},'%')
+            </if>
+        </where>
+        LIMIT #{start},#{length}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        tb_user AS a
+        <where>
             <if test="username != null and username != ''">
-                AND a.username LIKE CONCAT('%',#{username},'%')
+                AND a.username LIKE CONCAT ('%',#{username},'%')
             </if>
             <if test="phone != null and phone != ''">
                 AND a.phone LIKE CONCAT('%',#{phone},'%')
@@ -80,18 +96,6 @@
                 AND a.email LIKE CONCAT('%',#{email},'%')
             </if>
         </where>
-    </select>
-    <select id="pageByLimit" resultType="TbUser">
-        SELECT
-        <include refid="tbUserColumns"/>
-        FROM
-        tb_user AS a
-        limit #{0},#{1}
-    </select>
-    <select id="count" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        FROM
-        tb_user AS a
     </select>
 
     <!--已经自动映射了接收的对象-->

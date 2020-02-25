@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TbUserServiceImpl implements TbUserService {
@@ -29,18 +31,18 @@ public class TbUserServiceImpl implements TbUserService {
     public BaseResult save(TbUser tbUser) {
 //        通过验证
         BaseResult baseResult = checkUser(tbUser);
-        if(baseResult.getStatus() == BaseResult.FAIL_STATUS){
+        if (baseResult.getStatus() == BaseResult.FAIL_STATUS) {
             return baseResult;
         }
 
-        if(tbUser.getId()==null){
+        if (tbUser.getId() == null) {
 //            新增
             tbUser.setPassword(DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes()));
             tbUser.setUpdated(new Date());
             tbUser.setCreated(new Date());
             tbUserDao.insert(tbUser);
             baseResult.setMessage("新增成功");
-        }else{
+        } else {
 //            更新
             tbUser.setPassword(DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes()));
             tbUser.setUpdated(new Date());
@@ -52,7 +54,7 @@ public class TbUserServiceImpl implements TbUserService {
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    public void delete(Long userId) {
         tbUserDao.delete(userId);
     }
 
@@ -66,24 +68,16 @@ public class TbUserServiceImpl implements TbUserService {
         tbUserDao.updateUser(tbUser);
     }
 
-    @Override
-    public List<TbUser> selectByUserName(String userName) {
-        return tbUserDao.selectByUserName(userName);
-    }
 
     @Override
     public TbUser login(String email, String password) {
         TbUser tbUser = tbUserDao.findByEmail(email);
-        if(tbUser!=null && tbUser.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))){
+        if (tbUser != null && tbUser.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))) {
             return tbUser;
         }
         return null;
     }
 
-    @Override
-    public List<TbUser> search(TbUser tbUser) {
-        return tbUserDao.search(tbUser);
-    }
 
     @Override
     public void deleteMulti(String[] ids) {
@@ -91,34 +85,39 @@ public class TbUserServiceImpl implements TbUserService {
     }
 
     @Override
-    public PageInfo<TbUser> page(String start, String length, int draw){
+    public PageInfo<TbUser> page(int start, int length, int draw,TbUser tbUser) {
         PageInfo<TbUser> baseEntityPageInfo = new PageInfo<>();
-        Integer count = count();
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("start",start);
+        parameter.put("length",length);
+        parameter.put("tbUser",tbUser);
+
+        Integer count = count(tbUser);
         baseEntityPageInfo.setDraw(draw);
         baseEntityPageInfo.setRecordsFiltered(count);
         baseEntityPageInfo.setRecordsTotal(count);
-        baseEntityPageInfo.setData(tbUserDao.pageByLimit(Integer.parseInt(start),Integer.parseInt(length)));
+        baseEntityPageInfo.setData(tbUserDao.pageByLimit(parameter));
         return baseEntityPageInfo;
     }
 
     @Override
-    public Integer count() {
-        return tbUserDao.count();
+    public Integer count(TbUser tbUser) {
+        return tbUserDao.count(tbUser);
     }
 
-    public BaseResult checkUser(TbUser tbUser){
+    public BaseResult checkUser(TbUser tbUser) {
         BaseResult baseResult = BaseResult.success();
-        if(StringUtils.isBlank(tbUser.getUsername())){
+        if (StringUtils.isBlank(tbUser.getUsername())) {
             baseResult = BaseResult.fail("用户不能为空");
-        }else if(StringUtils.isBlank(tbUser.getPassword())){
+        } else if (StringUtils.isBlank(tbUser.getPassword())) {
             baseResult = BaseResult.fail("密码不能为空");
-        }else if(StringUtils.isBlank(tbUser.getPhone())){
+        } else if (StringUtils.isBlank(tbUser.getPhone())) {
             baseResult = BaseResult.fail("手机不能为空");
-        }else if(!RegexpUtils.checkPhone(tbUser.getPhone())){
+        } else if (!RegexpUtils.checkPhone(tbUser.getPhone())) {
             baseResult = BaseResult.fail("手机格式错误");
-        }else if(StringUtils.isBlank(tbUser.getEmail())){
+        } else if (StringUtils.isBlank(tbUser.getEmail())) {
             baseResult = BaseResult.fail("邮箱不能为空");
-        }else if(!RegexpUtils.checkEmail(tbUser.getEmail())){
+        } else if (!RegexpUtils.checkEmail(tbUser.getEmail())) {
             baseResult = BaseResult.fail("邮箱格式错误");
         }
         return baseResult;
