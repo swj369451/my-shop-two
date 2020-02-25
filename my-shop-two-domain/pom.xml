@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sm</groupId>
+        <artifactId>my-shop-two-dependencies</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../my-shop-two-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>my-shop-two-domain</artifactId>
+    <packaging>jar</packaging>
+
+    <name>my-shop-two-domain</name>
+    <description></description>
+
+    <dependencies>
+        <!-- Project Begin-->
+        <dependency>
+            <groupId>com.sm</groupId>
+            <artifactId>my-shop-two-commons</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- Project End-->
+    </dependencies>
+</project>

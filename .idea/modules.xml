@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/my-shop-two.iml" filepath="$PROJECT_DIR$/.idea/my-shop-two.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-commons/my-shop-two-commons.iml" filepath="$PROJECT_DIR$/my-shop-two-commons/my-shop-two-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-dependencies/my-shop-two-dependencies.iml" filepath="$PROJECT_DIR$/my-shop-two-dependencies/my-shop-two-dependencies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-domain/my-shop-two-domain.iml" filepath="$PROJECT_DIR$/my-shop-two-domain/my-shop-two-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-web-admin/my-shop-two-web-admin.iml" filepath="$PROJECT_DIR$/my-shop-two-web-admin/my-shop-two-web-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-web-api/my-shop-two-web-api.iml" filepath="$PROJECT_DIR$/my-shop-two-web-api/my-shop-two-web-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-web-ui/my-shop-two-web-ui.iml" filepath="$PROJECT_DIR$/my-shop-two-web-ui/my-shop-two-web-ui.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.my.shop.two.web.admin.dao.TbUserDao">
+    <sql id="tbUserColumns">
+          a.id,
+          a.username,
+          a.password,
+          a.phone,
+          a.email,
+          a.created,
+          a.updated
+    </sql>
+    <update id="updateUser">
+        UPDATE
+          tb_user AS a
+        SET
+          a.username = #{username},
+          a.password = #{password},
+          a.phone = #{phone},
+          a.email = #{email},
+          a.updated = #{updated}
+        WHERE
+          a.id = #{id}
+    </update>
+    <delete id="delete">
+        DELETE FROM tb_user WHERE id = #{userId}
+    </delete>
+    <delete id="deleteMultiByIds">
+        DELETE FROM tb_user
+        WHERE id IN
+        <if test="array != null and array.length > 0">
+            <foreach collection="array" open="(" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+    <select id="selectAll" resultType="TbUser">
+        SELECT
+          <include refid="tbUserColumns"/>
+        FROM
+          tb_user AS a
+    </select>
+    <select id="findById" resultType="TbUser">
+        SELECT
+          <include refid="tbUserColumns"/>
+        FROM
+          tb_user AS a
+        WHERE
+          a.id = #{userId}
+    </select>
+    <select id="selectByUserName" resultType="TbUser">
+        SELECT
+          <include refid="tbUserColumns"/>
+        FROM
+          tb_user AS a
+        WHERE
+          a.username LIKE CONCAT('%',#{userName},'%')
+    </select>
+    <select id="findByEmail" resultType="TbUser">
+        SELECT
+          <include refid="tbUserColumns"/>
+        FROM
+          tb_user AS a
+        WHERE
+          a.email = #{email}
+    </select>
+    <select id="search" resultType="TbUser">
+        SELECT
+        <include refid="tbUserColumns"/>
+        FROM
+        tb_user AS a
+        <where>
+            <if test="username != null and username != ''">
+                AND a.username LIKE CONCAT('%',#{username},'%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND a.phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="email != null and email != ''">
+                AND a.email LIKE CONCAT('%',#{email},'%')
+            </if>
+        </where>
+    </select>
+    <select id="pageByLimit" resultType="TbUser">
+        SELECT
+        <include refid="tbUserColumns"/>
+        FROM
+        tb_user AS a
+        limit #{0},#{1}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        tb_user AS a
+    </select>
+
+    <!--已经自动映射了接收的对象-->
+    <insert id="insert">
+        INSERT INTO tb_user (
+          username,
+          password,
+          phone,
+          email,
+          created,
+          updated
+        )
+        VALUES
+          (
+            #{username},
+            #{password},
+            #{phone},
+            #{email},
+            #{created},
+            #{updated}
+          )
+</insert>
+</mapper>
