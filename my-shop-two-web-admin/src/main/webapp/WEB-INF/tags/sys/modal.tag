@@ -10,7 +10,7 @@
                 <h4 class="modal-title">${title==null?"温馨提示":title}</h4>
             </div>
             <div class="modal-body">
-                <p id="modal-message">${message}&hellip;</p>
+                <p id="modal-message">${message}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>

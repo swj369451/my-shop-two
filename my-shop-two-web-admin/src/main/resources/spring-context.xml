@@ -9,4 +9,11 @@
     <content:component-scan base-package="com.sm.my.shop.two.web.admin">
         <content:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </content:component-scan>
+
+<!-- todo 1.无法使用validate -->
+    <!-- 配置 Bean Validator 定义 -->
+    <!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>-->
+    <!--<bean id="beanValidator" class="com.sm.my.shop.two.commons.validator.BeanValidator">-->
+        <!--<property name="validator" ref="validator" />-->
+    <!--</bean>-->
 </beans>

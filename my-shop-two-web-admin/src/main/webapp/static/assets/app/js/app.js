@@ -109,9 +109,9 @@ var app = function () {
             "serverSide": true,
             "ajax": {
                 "url": url,
-                "data": {
-                    args1: "username"
-                }
+                // "data": {
+                //     args1: "username"
+                // }
             },
             "columns":columns,
             //国际化
@@ -180,6 +180,44 @@ var app = function () {
         // },500);
     };
 
+    /**
+     * 初始化ztree
+     * 必须加载一个模态框
+     * 后台通过父类目id查询所有子类id
+     * @param url 后台地址
+     * @param autoParam 向后端传的数据，数组方式
+     * @param callback 得到选中的类目时执行的回调函数
+     */
+    var handlerInitZtree = function (url,autoParam,callback) {
+        var setting = {
+            view: {
+                //关闭多选
+                selectedMulti: false
+            },
+            async: {
+                enable: true,
+                url: url,
+                //当点击一个类目的时候自动传向后端的参数
+                autoParam: autoParam,
+            }
+        };
+        //初始化
+        $.fn.zTree.init($("#myTree"), setting);
+        //设置模态框
+        $("#modal-save").bind("click", function () {
+            var myTree = $.fn.zTree.getZTreeObj("myTree");
+            var nodes = myTree.getSelectedNodes();
+            if (nodes.length == 0) {
+                // 未选择
+                alert("请先选择一个节点");
+            } else {
+                // 已选择
+                callback(nodes);
+            }
+
+        })
+    };
+
     return{
         init:function () {
             handlerInitICheck();
@@ -196,6 +234,15 @@ var app = function () {
         },
         deleteById:function (url,id) {
             handlerDelete(url,id);
+        },
+        /**
+         * 初始化zTree
+         * @param url
+         * @param autoParam
+         * @param callback
+         */
+        initZtree:function (url,autoParam,callback){
+            handlerInitZtree(url,autoParam,callback);
         }
     }
 }();

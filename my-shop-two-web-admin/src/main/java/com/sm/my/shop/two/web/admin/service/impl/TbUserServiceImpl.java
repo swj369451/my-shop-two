@@ -29,12 +29,15 @@ public class TbUserServiceImpl implements TbUserService {
 
     @Override
     public BaseResult save(TbUser tbUser) {
-//        通过验证
-        BaseResult baseResult = checkUser(tbUser);
-        if (baseResult.getStatus() == BaseResult.FAIL_STATUS) {
-            return baseResult;
-        }
+        //    todo 1.无法使用validate
+//        String validator = BeanValidator.validator(tbUser);
+////        验证不通过
+//        if (validator != null) {
+//            return BaseResult.fail(validator);
+//        }
 
+//        通过验证
+        BaseResult baseResult = BaseResult.success();
         if (tbUser.getId() == null) {
 //            新增
             tbUser.setPassword(DigestUtils.md5DigestAsHex(tbUser.getPassword().getBytes()));
@@ -85,12 +88,12 @@ public class TbUserServiceImpl implements TbUserService {
     }
 
     @Override
-    public PageInfo<TbUser> page(int start, int length, int draw,TbUser tbUser) {
+    public PageInfo<TbUser> page(int start, int length, int draw, TbUser tbUser) {
         PageInfo<TbUser> baseEntityPageInfo = new PageInfo<>();
         Map<String, Object> parameter = new HashMap<>();
-        parameter.put("start",start);
-        parameter.put("length",length);
-        parameter.put("tbUser",tbUser);
+        parameter.put("start", start);
+        parameter.put("length", length);
+        parameter.put("tbUser", tbUser);
 
         Integer count = count(tbUser);
         baseEntityPageInfo.setDraw(draw);
@@ -105,7 +108,7 @@ public class TbUserServiceImpl implements TbUserService {
         return tbUserDao.count(tbUser);
     }
 
-    public BaseResult checkUser(TbUser tbUser) {
+    public BaseResult checkTbContent(TbUser tbUser) {
         BaseResult baseResult = BaseResult.success();
         if (StringUtils.isBlank(tbUser.getUsername())) {
             baseResult = BaseResult.fail("用户不能为空");
