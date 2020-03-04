@@ -1,5 +1,6 @@
 package com.sm.my.shop.two.web.admin.service;
 
+import com.sm.my.shop.two.commons.dto.BaseResult;
 import com.sm.my.shop.two.domain.TbContentCategory;
 
 import java.util.List;
@@ -25,4 +26,11 @@ public interface TbContentCategoryService {
      * @return
      */
     TbContentCategory findById(Long id);
+
+    /**
+     * 保存或更新数据
+     * @param tbContentCategory
+     * @return
+     */
+    BaseResult save(TbContentCategory tbContentCategory);
 }

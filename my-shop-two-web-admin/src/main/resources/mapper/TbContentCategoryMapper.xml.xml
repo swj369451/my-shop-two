@@ -11,6 +11,40 @@
         a.created,
         a.updated
     </sql>
+    <insert id="insert">
+        INSERT INTO tb_content_category (
+            parent_id,
+            name,
+            status,
+            sort_order,
+            is_parent,
+            created,
+            updated
+        )
+        VALUES
+          (
+            #{parentId},
+            #{name},
+            #{status},
+            #{sortOrder},
+            #{isParent},
+            #{created},
+            #{updated}
+          )
+    </insert>
+    <update id="updateUser">
+        UPDATE
+          tb_content_category AS a
+        SET
+            a.parent_id =  #{parentId},
+            a.name =  #{name},
+            a.status =  #{status},
+            a.sort_orde =  #{sortOrder},
+            a.is_parent =  #{isParent},
+            a.updated =  #{updated}
+        WHERE
+          a.id = #{id}
+    </update>
     <select id="selectAll" resultType="com.sm.my.shop.two.domain.TbContentCategory">
         SELECT
         <include refid="tbContentCategoryColumns"/>

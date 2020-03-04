@@ -113,10 +113,10 @@
         )
         VALUES
           (
-            #{category_id},
+            #{categoryId},
             #{title},
-            #{sub_title},
-            #{title_desc},
+            #{subTitle},
+            #{titleDesc},
             #{url},
             #{pic},
             #{pic2},

@@ -4,6 +4,7 @@ import com.sm.my.shop.two.commons.dto.BaseResult;
 import com.sm.my.shop.two.commons.dto.PageInfo;
 import com.sm.my.shop.two.domain.TbContent;
 import com.sm.my.shop.two.web.admin.service.TbContentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -103,5 +104,16 @@ public class ContentController {
     @RequestMapping(value="/detail",method = RequestMethod.GET)
     public String detail(){
         return "content_detail";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    public BaseResult delete(String ids){
+        BaseResult result = BaseResult.fail("删除内容失败");
+        if(StringUtils.isNoneBlank(ids)){
+            tbContentService.deleteMulti(ids.split(","));
+            result=BaseResult.success("删除内容成功");
+        }
+        return result;
     }
 }

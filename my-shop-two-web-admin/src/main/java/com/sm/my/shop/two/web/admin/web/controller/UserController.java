@@ -62,10 +62,10 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
-    public BaseResult delete(String userIds){
+    public BaseResult delete(String ids){
         BaseResult result = BaseResult.fail("删除用户失败");
-        if(StringUtils.isNoneBlank(userIds)){
-            tbUserService.deleteMulti(userIds.split(","));
+        if(StringUtils.isNoneBlank(ids)){
+            tbUserService.deleteMulti(ids.split(","));
             result=BaseResult.success("删除用户成功");
         }
         return result;

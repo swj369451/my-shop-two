@@ -20,6 +20,11 @@ public class TbContentImpl implements TbContentService {
     private TbContentDao tbContentDao;
 
     @Override
+    public void deleteMulti(String[] ids) {
+        tbContentDao.deleteMultiByIds(ids);
+    }
+
+    @Override
     public List<TbContent> selectAll() {
         return tbContentDao.selectAll();
     }
@@ -67,9 +72,9 @@ public class TbContentImpl implements TbContentService {
     public PageInfo<TbContent> page(int start, int length, int draw, TbContent tbContent) {
         PageInfo<TbContent> baseEntityPageInfo = new PageInfo<>();
         Map<String, Object> parameter = new HashMap<>();
-        parameter.put("start",start);
-        parameter.put("length",length);
-        parameter.put("tbContent",tbContent);
+        parameter.put("start", start);
+        parameter.put("length", length);
+        parameter.put("tbContent", tbContent);
 
         Integer count = count(tbContent);
         baseEntityPageInfo.setDraw(draw);

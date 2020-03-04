@@ -1,5 +1,6 @@
 package com.sm.my.shop.two.web.admin.service.impl;
 
+import com.sm.my.shop.two.commons.dto.BaseResult;
 import com.sm.my.shop.two.domain.TbContentCategory;
 import com.sm.my.shop.two.web.admin.dao.TbContentCategoryDao;
 import com.sm.my.shop.two.web.admin.service.TbContentCategoryService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,7 +43,7 @@ public class TbContentCategoryServiceImpl implements TbContentCategoryService {
                 targetList.add(tbContentCategory);
 
 //                判断是否有子节点
-                if(tbContentCategory.isParent()){
+                if(tbContentCategory.getIsParent()){
                     for(TbContentCategory contentCategory : sourceList){
 //                        寻找子节点
                         if(contentCategory.getId().equals(tbContentCategory.getId())){
@@ -52,5 +54,25 @@ public class TbContentCategoryServiceImpl implements TbContentCategoryService {
                 }
             }
         }
+    }
+
+    @Override
+    public BaseResult save(TbContentCategory tbContentCategory) {
+//        通过验证
+        BaseResult baseResult = BaseResult.success();
+        if (tbContentCategory.getId() == null) {
+//            新增
+            tbContentCategory.setUpdated(new Date());
+            tbContentCategory.setCreated(new Date());
+            tbContentCategoryDao.insert(tbContentCategory);
+            baseResult.setMessage("新增成功");
+        } else {
+//            更新
+            tbContentCategory.setUpdated(new Date());
+            tbContentCategoryDao.updateUser(tbContentCategory);
+            baseResult.setMessage("保存成功");
+        }
+
+        return baseResult;
     }
 }

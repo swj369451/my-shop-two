@@ -9,6 +9,11 @@ import java.util.Map;
 
 public interface TbContentService {
     /**
+     * 批量删除
+     * @param ids
+     */
+    void deleteMulti(String[] ids);
+    /**
      * 查询全部
      * @return
      */

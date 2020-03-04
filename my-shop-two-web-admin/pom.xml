@@ -60,6 +60,12 @@
             <artifactId>jstl</artifactId>
         </dependency>
         <!-- Servlet End -->
+        <!-- Comment Begin-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <!-- Comment End-->
         <!--Database Start-->
         <dependency>
             <groupId>com.alibaba</groupId>

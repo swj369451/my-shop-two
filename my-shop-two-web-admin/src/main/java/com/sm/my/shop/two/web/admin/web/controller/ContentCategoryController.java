@@ -1,5 +1,6 @@
 package com.sm.my.shop.two.web.admin.web.controller;
 
+import com.sm.my.shop.two.commons.dto.BaseResult;
 import com.sm.my.shop.two.domain.TbContentCategory;
 import com.sm.my.shop.two.web.admin.service.TbContentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -45,8 +47,8 @@ public class ContentCategoryController {
         if (id == null) {
             id = 0L;
         }
-
-        return tbContentCategoryService.selectByParentId(id);
+        List<TbContentCategory> tbContentCategories = tbContentCategoryService.selectByParentId(id);
+        return tbContentCategories;
     }
 
     /**
@@ -59,5 +61,29 @@ public class ContentCategoryController {
     }
 
 
+    /**
+     * 保存与新增用户
+     * @param tbContentCategory
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    public String save(TbContentCategory tbContentCategory,
+                       Model model,
+                       RedirectAttributes redirectAttributes){
+        BaseResult baseResult = tbContentCategoryService.save(tbContentCategory);
+
+        if(baseResult.getStatus() == BaseResult.SUCCESS_STATUS){
+//            保存成功
+            redirectAttributes.addFlashAttribute("result",baseResult);
+            return "redirect:/content/category/list";
+        }else{
+//            保存失败
+            model.addAttribute("result",baseResult);
+            model.addAttribute("tbContentCategory",tbContentCategory);
+            return "content_category_form";
+        }
+    }
 
 }

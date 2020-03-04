@@ -12,5 +12,5 @@ public class TbContentCategory extends BaseEntity {
     private String name;
     private Integer status;
     private Integer sortOrder;
-    private boolean isParent;
+    private Boolean isParent;
 }

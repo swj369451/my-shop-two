@@ -1,7 +1,27 @@
 var app = function () {
     var checkAllBtn;
-    var checkBox ;
+    var checkBox;
     var checkedIdArray;
+
+    var defaultDropzoneConfig = {
+        url: "", // 文件提交地址
+        method: "post",  // 也可用put
+        paramName: "file", // 默认为file
+        maxFiles: 1,// 一次性上传的文件数量上限
+        maxFilesize: 2, // 文件大小，单位：MB
+        acceptedFiles: ".jpg,.gif,.png,.jpeg", // 上传的类型
+        addRemoveLinks: true,
+        parallelUploads: 1,// 一次上传的文件数量
+        //previewsContainer:"#preview", // 上传图片的预览窗口
+        dictDefaultMessage: '拖动文件至此或者点击上传',
+        dictMaxFilesExceeded: "您最多只能上传"+this.maxFiles+"个文件！",
+        dictResponseError: '文件上传失败!',
+        dictInvalidFileType: "文件类型只能是"+this.acceptedFiles,
+        dictFallbackMessage: "浏览器不受支持",
+        dictFileTooBig: "文件过大上传文件最大支持.",
+        dictRemoveLinks: "删除",
+        dictCancelUpload: "取消",
+    };
 
     /**
      * 初始化ICheck
@@ -9,7 +29,7 @@ var app = function () {
     var handlerInitICheck = function () {
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
-            radioClass   : 'iradio_minimal-blue'
+            radioClass: 'iradio_minimal-blue'
         });
         //选中主要的checkbox和被控制的checkbox
         checkAllBtn = $('input[type="checkbox"].minimal.icheck_master');
@@ -20,11 +40,11 @@ var app = function () {
      * 全选按钮点击事件
      */
     var handlerCheckBoxAll = function () {
-        checkAllBtn.on("ifClicked",function (e) {
-            if(e.target.checked){
+        checkAllBtn.on("ifClicked", function (e) {
+            if (e.target.checked) {
                 //    返回true表示未选中
                 checkBox.iCheck("uncheck");
-            }else{
+            } else {
                 //    选中状态
                 checkBox.iCheck("check");
             }
@@ -41,43 +61,43 @@ var app = function () {
         //判断是否选中并添加id到数组中
         checkBox.each(function () {
             var _id = $(this).attr('id');
-            if(_id != null && _id != 'undefine' && $(this).is(":checked")){
+            if (_id != null && _id != 'undefine' && $(this).is(":checked")) {
                 checkedIdArray.push(_id)
             }
         });
         //判断是否有选中
-        if(checkedIdArray.length === 0){
+        if (checkedIdArray.length === 0) {
             //未选中任何一项
             $("#modal-message").html("请至少选择一项");
-            $('#modal-save').bind('click',function () {
+            $('#modal-save').bind('click', function () {
                 $("#modal-default").modal('hide');
             });
-        }else{
+        } else {
             //已有选中
             $("#modal-message").html("您确定要删除吗");
-            $('#modal-save').bind('click',function () {
+            $('#modal-save').bind('click', function () {
                 setTimeout(function () {
                     //删除的ajax请求
                     $.ajax({
-                        "url":url,
-                        "type":"POST",
-                        "async":false,
-                        "data":{"userIds":checkedIdArray.toString()},
-                        "dataType":"JSON",
-                        "success":function (data) {
+                        "url": url,
+                        "type": "POST",
+                        "async": false,
+                        "data": {"ids": checkedIdArray.toString()},
+                        "dataType": "JSON",
+                        "success": function (data) {
                             //在返回的数据中进行判断是否成功，并解除之前的模态框绑定
                             $('#modal-save').unbind('click');
                             $("#modal-message").html(data.message);
-                            if(data.status === 200){
+                            if (data.status === 200) {
                                 //    成功执行
                                 // window.location.reload();
-                                $('#modal-save').bind('click',function () {
+                                $('#modal-save').bind('click', function () {
                                     $("#modal-default").modal('hide');
                                     window.location.reload();
                                 });
-                            }else{
+                            } else {
                                 //    执行错误
-                                $('#modal-save').bind('click',function () {
+                                $('#modal-save').bind('click', function () {
                                     $("#modal-default").modal('hide');
                                 });
 
@@ -85,8 +105,8 @@ var app = function () {
                             $("#modal-default").modal('show');
                         }
                     });
-                },500);
-                // $("#modal-default").modal('hide');
+                }, 500);
+                $("#modal-default").modal('hide');
             });
         }
         //显示模态框
@@ -99,7 +119,7 @@ var app = function () {
      * @param columns 列的数据
      * @returns {*|jQuery}
      */
-    var handlerInitDateTables = function (url,columns) {
+    var handlerInitDateTables = function (url, columns) {
         var dataTables = $('#dataTable').DataTable({
             "lengthChange": false,
             "info": true,
@@ -113,7 +133,7 @@ var app = function () {
                 //     args1: "username"
                 // }
             },
-            "columns":columns,
+            "columns": columns,
             //国际化
             language: {
                 "sProcessing": "处理中...",
@@ -140,7 +160,7 @@ var app = function () {
                 }
             },
             //回调函数，每当翻一页的时候就执行icheck的样式更新
-            "drawCallback": function( settings ) {
+            "drawCallback": function (settings) {
                 handlerInitICheck();
                 handlerCheckBoxAll();
             }
@@ -165,18 +185,23 @@ var app = function () {
         });
     };
 
-    var handlerDelete = function (url,id) {
+    /**
+     * 根据id删除
+     * @param url 请求路径
+     * @param id
+     */
+    var handlerDelete = function (url, id) {
         // setTimeout(function () {
-            $.ajax({
-                "url": url,
-                "type": "POST",
-                "data": {"userIds": id},
-                success: function (data) {
-                    if(data.status === 200){
-                        window.location.reload();
-                    }
+        $.ajax({
+            "url": url,
+            "type": "POST",
+            "data": {"userIds": id},
+            success: function (data) {
+                if (data.status === 200) {
+                    window.location.reload();
                 }
-            });
+            }
+        });
         // },500);
     };
 
@@ -188,7 +213,7 @@ var app = function () {
      * @param autoParam 向后端传的数据，数组方式
      * @param callback 得到选中的类目时执行的回调函数
      */
-    var handlerInitZtree = function (url,autoParam,callback) {
+    var handlerInitZtree = function (url, autoParam, callback) {
         var setting = {
             view: {
                 //关闭多选
@@ -218,22 +243,36 @@ var app = function () {
         })
     };
 
-    return{
-        init:function () {
+    /**
+     * 初始化dropzone
+     * @param url 文件上传请求路径
+     * @param id html中div的id
+     * @param paramName 后端接收的参数名称
+     * @param callback 上传成功时回调函数
+     */
+    var handlerInitDropzone = function (opts) {
+        //关闭dropzone的自动发现
+        Dropzone.autoDiscover = false;
+        //让opts继承defaultDropzoneConfig的属性,extend()的第一个形参为true时候进行深拷贝，否则浅拷贝
+        $.extend(defaultDropzoneConfig,opts);
+        var myDropzone = new Dropzone("#"+defaultDropzoneConfig.id, defaultDropzoneConfig);
+    };
+    return {
+        init: function () {
             handlerInitICheck();
             handlerCheckBoxAll();
         },
-        deleteMulti:function (url) {
+        deleteMulti: function (url) {
             handlerDeleteMulti(url);
         },
-        initDataTables:function (url,columns) {
-            return handlerInitDateTables(url,columns);
+        initDataTables: function (url, columns) {
+            return handlerInitDateTables(url, columns);
         },
-        showDetail:function (url) {
-          handlerShowDetail(url);
+        showDetail: function (url) {
+            handlerShowDetail(url);
         },
-        deleteById:function (url,id) {
-            handlerDelete(url,id);
+        deleteById: function (url, id) {
+            handlerDelete(url, id);
         },
         /**
          * 初始化zTree
@@ -241,8 +280,18 @@ var app = function () {
          * @param autoParam
          * @param callback
          */
-        initZtree:function (url,autoParam,callback){
-            handlerInitZtree(url,autoParam,callback);
+        initZtree: function (url, autoParam, callback) {
+            handlerInitZtree(url, autoParam, callback);
+        },
+        /**
+         * 初始化dropzone
+         * @param url 文件上传请求路径
+         * @param id html中div的id
+         * @param paramName 后端接收的参数名称
+         * @param callback 上传成功时回调函数
+         */
+        initDropzone:function (opts) {
+            handlerInitDropzone(opts);
         }
     }
 }();

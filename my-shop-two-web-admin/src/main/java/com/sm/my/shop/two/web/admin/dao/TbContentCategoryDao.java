@@ -1,6 +1,7 @@
 package com.sm.my.shop.two.web.admin.dao;
 
 import com.sm.my.shop.two.domain.TbContentCategory;
+import com.sm.my.shop.two.domain.TbUser;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,4 +29,17 @@ public interface TbContentCategoryDao {
      * @return
      */
     TbContentCategory findById(Long id);
+
+
+    /**
+     * 插入
+     * @param tbContentCategory
+     */
+    void insert(TbContentCategory tbContentCategory);
+
+    /**
+     * 更新类别
+     * @param tbContentCategory
+     */
+    void updateUser(TbContentCategory tbContentCategory);
 }
