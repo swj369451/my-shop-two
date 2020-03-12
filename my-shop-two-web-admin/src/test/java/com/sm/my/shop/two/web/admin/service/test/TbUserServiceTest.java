@@ -48,7 +48,7 @@ public class TbUserServiceTest {
     public void testUpdateUser(){
         TbUser tbUser = tbUserService.findById(33L);
         tbUser.setUsername("滴");
-        tbUserService.updateUser(tbUser);
+        tbUserService.update(tbUser);
     }
 
     @Test

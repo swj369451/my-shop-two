@@ -55,10 +55,11 @@
 
                             <div class="col-sm-10">
                                     <%-- path="username" 等同于id,name,value都是等于usernmae--%>
-                                <form:hidden path="parentId"/>
-                                        <input type="text" class="form-control required" placeholder="请输入父级"
-                                                id="categoryName" readonly="readonly"
-                                               data-toggle="modal" data-target="#modal-default" >
+                                    <%--<form:hidden path="parent.id"/>--%>
+                                <input type="text" id="parentId" name="parent.id" value="${tbContentCategory.parent.id}">
+                                <input type="text" class="form-control required" placeholder="请输入父级"
+                                       id="categoryName" readonly="readonly"
+                                       data-toggle="modal" data-target="#modal-default" value="${tbContentCategory.parent.name}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -72,7 +73,8 @@
                             <label for="sortOrder" class="col-sm-2 control-label">分类排序</label>
 
                             <div class="col-sm-10">
-                                <form:input cssClass="form-control required digits" path="sortOrder" placeholder="请输入分类排序"/>
+                                <form:input cssClass="form-control required digits" path="sortOrder"
+                                            placeholder="请输入分类排序"/>
                             </div>
                         </div>
                     </div>
@@ -98,12 +100,12 @@
 <script type="text/javascript" src="/static/assets/plugins/jquery-ztree/js/jquery.ztree.core-3.5.min.js"></script>
 <script>
     $(function () {
-       app.initZtree("/content/category/treeDate",['id'],function (nodes) {
-           var node = nodes[0];
-           $('#parentId').val(node.id);
-           $('#categoryName').val(node.name);
-           $('#modal-default').modal('hide');
-       })
+        app.initZtree("/content/category/treeDate", ['id'], function (nodes) {
+            var node = nodes[0];
+            $('#parentId').val(node.id);
+            $('#categoryName').val(node.name);
+            $('#modal-default').modal('hide');
+        })
     })
 </script>
 </body>

@@ -38,7 +38,8 @@
                             <h3 class="box-title">分类列表</h3>
                         </div>
                         <div class="box-body">
-                            <a href="/content/category/form" type="button" class="btn btn-sm btn-default"><i class="fa fa-search"></i>新增</a>
+                            <a href="/content/category/form" type="button" class="btn btn-sm btn-default"><i
+                                    class="fa fa-search"></i>新增</a>
                             &nbsp;&nbsp;&nbsp;
                             <a href="#" type="button" class="btn btn-sm btn-default"><i
                                     class="fa fa-download"></i>导入</a>
@@ -65,20 +66,23 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach items="${list}" var="tbContentCategory">
-                                    <tr id="${tbContentCategory.id}" pId="${tbContentCategory.parentId}">
+                                    <tr id="${tbContentCategory.id}" pId="${tbContentCategory.parent.id}">
                                         <td>${tbContentCategory.id}</td>
                                         <td>${tbContentCategory.name}</td>
                                         <td>${tbContentCategory.sortOrder}</td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-primary"><i
+                                            <a type="button" href="/content/category/form?id=${tbContentCategory.id}"
+                                               class="btn btn-sm btn-primary"><i
                                                     class="fa fa-edit"></i>编辑
-                                            </button>
+                                            </a>
                                             <button type="button" class="btn btn-sm btn-danger"><i
                                                     class="fa fa-remove"></i>删除
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-default"><i
+                                            <a type="button"
+                                                    href="/content/category/form?parent.id=${tbContentCategory.id}&&parent.name=${tbContentCategory.name}"
+                                                    class="btn btn-sm btn-default"><i
                                                     class="fa fa-remove"></i>新增下级菜单
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 </c:forEach>

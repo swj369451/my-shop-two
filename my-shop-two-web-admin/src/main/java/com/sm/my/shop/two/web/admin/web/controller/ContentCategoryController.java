@@ -6,10 +6,7 @@ import com.sm.my.shop.two.web.admin.service.TbContentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -21,10 +18,10 @@ public class ContentCategoryController {
     private TbContentCategoryService tbContentCategoryService;
 
     @ModelAttribute
-    public TbContentCategory getTbContent(Long contentId){
-        if(contentId == null){
+    public TbContentCategory getTbContent(Long contentId) {
+        if (contentId == null) {
             return new TbContentCategory();
-        }else {
+        } else {
             return tbContentCategoryService.findById(contentId);
         }
 
@@ -32,12 +29,13 @@ public class ContentCategoryController {
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("list", tbContentCategoryService.findAll());
+        model.addAttribute("list", tbContentCategoryService.selectAll());
         return "content_category_list";
     }
 
     /**
      * 查询类的树结构
+     *
      * @param id
      * @return
      */
@@ -53,35 +51,37 @@ public class ContentCategoryController {
 
     /**
      * 跳转到分类表单页面
+     *
      * @return
      */
-    @RequestMapping(value = "/form",method = RequestMethod.GET)
-    public String contentForm(){
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    public String contentForm(TbContentCategory tbContentCategory) {
         return "content_category_form";
     }
 
 
     /**
      * 保存与新增用户
+     *
      * @param tbContentCategory
      * @param model
      * @param redirectAttributes
      * @return
      */
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(TbContentCategory tbContentCategory,
                        Model model,
-                       RedirectAttributes redirectAttributes){
+                       RedirectAttributes redirectAttributes) {
         BaseResult baseResult = tbContentCategoryService.save(tbContentCategory);
 
-        if(baseResult.getStatus() == BaseResult.SUCCESS_STATUS){
+        if (baseResult.getStatus() == BaseResult.SUCCESS_STATUS) {
 //            保存成功
-            redirectAttributes.addFlashAttribute("result",baseResult);
+            redirectAttributes.addFlashAttribute("result", baseResult);
             return "redirect:/content/category/list";
-        }else{
+        } else {
 //            保存失败
-            model.addAttribute("result",baseResult);
-            model.addAttribute("tbContentCategory",tbContentCategory);
+            model.addAttribute("result", baseResult);
+            model.addAttribute("tbContentCategory", tbContentCategory);
             return "content_category_form";
         }
     }

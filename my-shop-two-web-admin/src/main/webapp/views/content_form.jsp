@@ -58,14 +58,14 @@
                     <form:hidden path="id"/>
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="categoryId" class="col-sm-2 control-label">父级类目</label>
+                            <label class="col-sm-2 control-label">父级类目</label>
 
                             <div class="col-sm-10">
                                     <%-- path="username" 等同于id,name,value都是等于usernmae--%>
-                                <form:hidden path="categoryId"/>
+                                <form:hidden id="categoryId" path="tbContentCategory.id"/>
                                 <input type="text" class="form-control required" placeholder="请输入父级"
                                        id="categoryName" readonly="readonly"
-                                       data-toggle="modal" data-target="#modal-default">
+                                       data-toggle="modal" data-target="#modal-default" value="${tbContent.tbContentCategory.name}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -151,6 +151,7 @@
 <script type="text/javascript" src="/static/assets/plugins/wangEditor/wangEditor.min.js"></script>
 
 <script>
+    // treeDate
     $(function () {
         app.initZtree("/content/category/treeDate", ['id'], function (nodes) {
             var node = nodes[0];

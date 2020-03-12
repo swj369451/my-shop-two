@@ -108,6 +108,7 @@
                                 <tr>
                                     <th><input type="checkbox" class="minimal icheck_master"></th>
                                     <th>id</th>
+                                    <th>所属分类</th>
                                     <th>标题</th>
                                     <th>副标题</th>
                                     <th>详情</th>
@@ -148,6 +149,7 @@
             }
         },
         {"data": "id"},
+        {"data": "tbContentCategory.name"},
         {"data": "title"},
         {"data": "subTitle"},
         {"data": "titleDesc"},

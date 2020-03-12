@@ -67,11 +67,10 @@
         </dependency>
         <!-- Json End -->
         <!--Database Start-->
-        <!-- todo 1.无法使用validate -->
-        <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-validator</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
         <!--Database End-->
         <!-- Lombok Begin-->
         <dependency>

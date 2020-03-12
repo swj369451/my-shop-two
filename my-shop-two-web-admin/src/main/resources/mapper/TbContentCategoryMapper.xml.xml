@@ -2,14 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sm.my.shop.two.web.admin.dao.TbContentCategoryDao">
     <sql id="tbContentCategoryColumns">
-        a.id,
-        a.parent_id AS parentId,
-        a.name,
-        a.status,
-        a.sort_order AS sortOrder,
-        a.is_parent AS isParent,
-        a.created,
-        a.updated
+      a.id,
+      a.parent_id AS parentId,
+      a.name,
+      a.status,
+      a.sort_order AS sortOrder,
+      a.is_parent AS isParent,
+      a.created,
+      a.updated,
+      IFNULL(b.id, '0') AS 'parent.id',
+      IFNULL(b.name, '/') AS 'parent.name'
+    </sql>
+    <sql id="joinContentCategory">
+      LEFT JOIN tb_content_category AS b
+        ON a.parent_id = b.id
     </sql>
     <insert id="insert">
         INSERT INTO tb_content_category (
@@ -23,7 +29,7 @@
         )
         VALUES
           (
-            #{parentId},
+            #{parent.id},
             #{name},
             #{status},
             #{sortOrder},
@@ -32,16 +38,17 @@
             #{updated}
           )
     </insert>
-    <update id="updateUser">
+    <update id="update">
         UPDATE
           tb_content_category AS a
         SET
-            a.parent_id =  #{parentId},
-            a.name =  #{name},
-            a.status =  #{status},
-            a.sort_orde =  #{sortOrder},
-            a.is_parent =  #{isParent},
-            a.updated =  #{updated}
+
+           a.parent_id =  #{parent.id},
+           a.name=  #{name},
+           a.status=  #{status},
+           a.sort_order=  #{sortOrder},
+           a.is_parent =  #{isParent},
+           a.updated=  #{updated}
         WHERE
           a.id = #{id}
     </update>
@@ -50,8 +57,8 @@
         <include refid="tbContentCategoryColumns"/>
         FROM
         tb_content_category AS a
-        ORDER BY
-        a.parent_id,
+        <include refid="joinContentCategory"/>
+        ORDER BY a.parent_id,
         a.sort_order,
         a.is_parent DESC
     </select>
@@ -60,13 +67,15 @@
         <include refid="tbContentCategoryColumns"/>
         FROM
         tb_content_category AS a
-        WHERE a.parent_id = #{parentId}
+        <include refid="joinContentCategory"/>
+        WHERE a.parent_id = #{parent.id}
     </select>
     <select id="findById" resultType="com.sm.my.shop.two.domain.TbContentCategory">
         SELECT
         <include refid="tbContentCategoryColumns"/>
         FROM
         tb_content_category AS a
+        <include refid="joinContentCategory"/>
         WHERE a.id = #{id}
     </select>
 

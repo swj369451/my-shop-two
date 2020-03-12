@@ -195,7 +195,7 @@ var app = function () {
         $.ajax({
             "url": url,
             "type": "POST",
-            "data": {"userIds": id},
+            "data": {"ids": id},
             success: function (data) {
                 if (data.status === 200) {
                     window.location.reload();
