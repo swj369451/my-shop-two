@@ -192,7 +192,8 @@
     // 或者 var editor = new E( document.getElementById('editor') )
     // 配置图片上传
     editor.customConfig.uploadImgServer = '/upload';
-    editor.customConfig.uploadFileName = 'editFile';
+    editor.customConfig.uploadFileName = 'editFiles';
+    editor.customConfig.uploadImgMaxLength = 5;
     editor.create();
 
     //配置富文本到input框

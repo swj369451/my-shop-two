@@ -1,18 +1,20 @@
 package com.sm.my.shop.two.web.admin.service.impl;
 
 import com.sm.my.shop.two.commons.dto.BaseResult;
-import com.sm.my.shop.two.commons.persistence.BaseServiceImpl;
 import com.sm.my.shop.two.commons.validator.BeanValidator;
 import com.sm.my.shop.two.domain.TbContentCategory;
+import com.sm.my.shop.two.web.admin.abstracts.BaseServiceImpl;
 import com.sm.my.shop.two.web.admin.dao.TbContentCategoryDao;
 import com.sm.my.shop.two.web.admin.service.TbContentCategoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class TbContentCategoryServiceImpl extends BaseServiceImpl<TbContentCategory,TbContentCategoryDao> implements TbContentCategoryService {
 
 
@@ -57,6 +59,7 @@ public class TbContentCategoryServiceImpl extends BaseServiceImpl<TbContentCateg
     }
 
     @Override
+    @Transactional(readOnly = false)
     public BaseResult save(TbContentCategory tbContentCategory) {
         String validator = BeanValidator.validator(tbContentCategory);
 //        1.验证不通过

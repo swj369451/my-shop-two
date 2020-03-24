@@ -153,10 +153,11 @@
                 var deleteUrl = "/user/delete";
                 return '<button onclick="app.showDetail(\''+detailUrl+'\')" type="button" class="btn btn-sm btn-default"><i class="fa fa-search"></i>查看</button>&nbsp;&nbsp;&nbsp;' +
                     '<a href="/user/form?userId=' + row.id + '" type="button" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>编辑</a>&nbsp;&nbsp;&nbsp;' +
-                    '<button onclick="app.deleteById(\''+deleteUrl+'\','+row.id+')" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i>删除</button>';
+                    '<button type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i>删除</button>';
             }
         },
     ];
+
     var dataTables = app.initDataTables("/user/page", columns);
     function search() {
         var param = {

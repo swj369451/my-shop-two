@@ -1,24 +1,30 @@
 package com.sm.my.shop.two.web.admin.service.impl;
 
 import com.sm.my.shop.two.commons.dto.BaseResult;
-import com.sm.my.shop.two.commons.persistence.BaseServiceImpl;
+import com.sm.my.shop.two.commons.validator.BeanValidator;
 import com.sm.my.shop.two.domain.TbContent;
+import com.sm.my.shop.two.web.admin.abstracts.BaseServiceImpl;
 import com.sm.my.shop.two.web.admin.dao.TbContentDao;
 import com.sm.my.shop.two.web.admin.service.TbContentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
 @Service
+@Transactional(readOnly = true)
 public class TbContentImpl extends BaseServiceImpl<TbContent,TbContentDao> implements TbContentService {
+
     @Override
+    @Transactional(readOnly = false)
     public BaseResult save(TbContent tbContent) {
-        //        通过验证
-        BaseResult baseResult = check(tbContent);
-        if (baseResult.getStatus() == BaseResult.FAIL_STATUS) {
-            return baseResult;
+        String validator = BeanValidator.validator(tbContent);
+//        验证不通过
+        if (validator != null) {
+            return BaseResult.fail(validator);
         }
 
+        BaseResult baseResult = BaseResult.success();
         if (tbContent.getId() == null) {
 //            新增
             tbContent.setUpdated(new Date());
@@ -34,12 +40,4 @@ public class TbContentImpl extends BaseServiceImpl<TbContent,TbContentDao> imple
         return baseResult;
     }
 
-
-    public BaseResult check(TbContent tbContent) {
-        BaseResult baseResult = BaseResult.success();
-        if (tbContent.getTbContentCategory().getId() == null) {
-            baseResult = BaseResult.fail("所属分类不能为空");
-        }
-        return baseResult;
-    }
 }

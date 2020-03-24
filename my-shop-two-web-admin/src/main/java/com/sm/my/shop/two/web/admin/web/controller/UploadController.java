@@ -9,9 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 异步上传文件
@@ -22,16 +20,37 @@ public class UploadController {
 
     @ResponseBody
     @RequestMapping(value = "upload", method = RequestMethod.POST)
-    public Map<String, Object> load(MultipartFile dropFile, MultipartFile editFile, HttpServletRequest request) {
-        MultipartFile myFile = dropFile == null ? editFile : dropFile;
+    public Map<String, Object> load(MultipartFile dropFile, MultipartFile[] editFiles, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
 
-//        获取文件名称
-        String fileRealName = myFile.getOriginalFilename();
+//        dropFile上传
+        if(dropFile!=null){
+            result.put("fileName", writeFile(dropFile,request));
+        }
+        if(editFiles!=null && editFiles.length>0) {
+//            wangEditor上传
+            List<String> fileNames = new ArrayList<>();
+            for (MultipartFile editFile : editFiles) {
+                fileNames.add(writeFile(editFile,request));
+            }
+            result.put("errno", 0);
+            result.put("data", fileNames);
+        }
+        return result;
+    }
+
+    /**
+     * 存储文件并返回文件在服务器中的地址
+     * @param multipartFile
+     * @param request
+     * @return
+     */
+    public String writeFile(MultipartFile multipartFile, HttpServletRequest request) {
+//        获取文件名
+        String fileRealName = multipartFile.getOriginalFilename();
         String fileSuffix = fileRealName.substring(fileRealName.lastIndexOf("."));
         String fileName = UUID.randomUUID() + fileSuffix;
-        //        获取根目录真实路径
-//        request.getSession().getServletContext().getRealPath("/");
+//        获取文件路径
         String filePath = request.getSession().getServletContext().getRealPath(UPLOAD_PATH);
 //        判断是否存在文件夹，没有则创建
         File file = new File(filePath);
@@ -41,20 +60,12 @@ public class UploadController {
 //        写入文件
         file = new File(filePath, fileName);
         try {
-            myFile.transferTo(file);
+            multipartFile.transferTo(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        返回数据
-        if (dropFile != null) {
-            result.put("fileName", UPLOAD_PATH + fileName);
-        } else {
-            String serverPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-            result.put("errno", 0);
-            result.put("data", new String[]{
-                    serverPath + UPLOAD_PATH + fileName
-            });
-        }
-        return result;
+//        完整的文件路径
+        String serverPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        return serverPath + UPLOAD_PATH + fileName;
     }
 }

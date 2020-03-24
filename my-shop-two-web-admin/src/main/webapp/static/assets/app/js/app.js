@@ -14,9 +14,9 @@ var app = function () {
         parallelUploads: 1,// 一次上传的文件数量
         //previewsContainer:"#preview", // 上传图片的预览窗口
         dictDefaultMessage: '拖动文件至此或者点击上传',
-        dictMaxFilesExceeded: "您最多只能上传"+this.maxFiles+"个文件！",
+        dictMaxFilesExceeded: "您最多只能上传" + this.maxFiles + "个文件！",
         dictResponseError: '文件上传失败!',
-        dictInvalidFileType: "文件类型只能是"+this.acceptedFiles,
+        dictInvalidFileType: "文件类型只能是" + this.acceptedFiles,
         dictFallbackMessage: "浏览器不受支持",
         dictFileTooBig: "文件过大上传文件最大支持.",
         dictRemoveLinks: "删除",
@@ -188,21 +188,40 @@ var app = function () {
     /**
      * 根据id删除
      * @param url 请求路径
-     * @param id
      */
-    var handlerDelete = function (url, id) {
-        // setTimeout(function () {
-        $.ajax({
-            "url": url,
-            "type": "POST",
-            "data": {"ids": id},
-            success: function (data) {
-                if (data.status === 200) {
-                    window.location.reload();
-                }
-            }
-        });
-        // },500);
+    var handlerDeleteData = function (url) {
+        $("#modal-default").modal("hide");
+        //判断是否有id
+        if (checkedIdArray.length > 0) {
+            // 发起异步删除请求
+            setTimeout(function () {
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: {'ids': checkedIdArray.toString()},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        //解除确认按钮的绑定
+                        $("#modal-save").unbind("click");
+                        if (data.status === 200) {
+                            //删除成功
+                            $("#modal-save").bind("click", function () {
+                                window.location.reload();
+                            })
+                        } else {
+                            //删除失败
+                            $("#modal-save").bind("click", function () {
+                                $("#modal-default").modal("hide");
+                            })
+                        }
+                        //设置处理信息
+                        $("#modal-message").html(data.message);
+                        $("#modal-default").modal("show");
+
+                    }
+                })
+            }, 500)
+        }
     };
 
     /**
@@ -245,22 +264,32 @@ var app = function () {
 
     /**
      * 初始化dropzone
-     * @param url 文件上传请求路径
-     * @param id html中div的id
-     * @param paramName 后端接收的参数名称
-     * @param callback 上传成功时回调函数
      */
     var handlerInitDropzone = function (opts) {
         //关闭dropzone的自动发现
         Dropzone.autoDiscover = false;
         //让opts继承defaultDropzoneConfig的属性,extend()的第一个形参为true时候进行深拷贝，否则浅拷贝
-        $.extend(defaultDropzoneConfig,opts);
-        var myDropzone = new Dropzone("#"+defaultDropzoneConfig.id, defaultDropzoneConfig);
+        $.extend(defaultDropzoneConfig, opts);
+        var myDropzone = new Dropzone("#" + defaultDropzoneConfig.id, defaultDropzoneConfig);
+    };
+    var handlerDeleteSingle = function (url, id, mes) {
+        //设置为可选参数，当为空的时候设置为null
+        if (!mes) mes = null;
+
+        //将id放入数组中和批量删除通用
+        checkedIdArray = new Array();
+        checkedIdArray.push(id);
+
+        $("#modal-message").html(mes == null ? "你确定要删除吗？" : mes);
+        $("#modal-default").modal("show");
+        $("#modal-save").bind("click", function () {
+            handlerDeleteData(url)
+        });
+
     };
     return {
         init: function () {
             handlerInitICheck();
-            handlerCheckBoxAll();
         },
         deleteMulti: function (url) {
             handlerDeleteMulti(url);
@@ -271,27 +300,14 @@ var app = function () {
         showDetail: function (url) {
             handlerShowDetail(url);
         },
-        deleteById: function (url, id) {
-            handlerDelete(url, id);
-        },
-        /**
-         * 初始化zTree
-         * @param url
-         * @param autoParam
-         * @param callback
-         */
         initZtree: function (url, autoParam, callback) {
             handlerInitZtree(url, autoParam, callback);
         },
-        /**
-         * 初始化dropzone
-         * @param url 文件上传请求路径
-         * @param id html中div的id
-         * @param paramName 后端接收的参数名称
-         * @param callback 上传成功时回调函数
-         */
-        initDropzone:function (opts) {
+        initDropzone: function (opts) {
             handlerInitDropzone(opts);
+        },
+        deleteSingle: function (url, id, mes) {
+            handlerDeleteSingle(url, id, mes);
         }
     }
 }();

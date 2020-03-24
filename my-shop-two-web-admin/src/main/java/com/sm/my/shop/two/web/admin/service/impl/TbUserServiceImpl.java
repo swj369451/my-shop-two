@@ -1,22 +1,23 @@
 package com.sm.my.shop.two.web.admin.service.impl;
 
 import com.sm.my.shop.two.commons.dto.BaseResult;
-import com.sm.my.shop.two.commons.persistence.BaseServiceImpl;
-import com.sm.my.shop.two.commons.utils.RegexpUtils;
 import com.sm.my.shop.two.commons.validator.BeanValidator;
 import com.sm.my.shop.two.domain.TbUser;
+import com.sm.my.shop.two.web.admin.abstracts.BaseServiceImpl;
 import com.sm.my.shop.two.web.admin.dao.TbUserDao;
 import com.sm.my.shop.two.web.admin.service.TbUserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 
 @Service
+@Transactional(readOnly = true)
 public class TbUserServiceImpl extends BaseServiceImpl<TbUser,TbUserDao> implements TbUserService {
 
     @Override
+    @Transactional(readOnly = false)
     public BaseResult save(TbUser tbUser) {
         String validator = BeanValidator.validator(tbUser);
 //        验证不通过
@@ -53,21 +54,4 @@ public class TbUserServiceImpl extends BaseServiceImpl<TbUser,TbUserDao> impleme
         return null;
     }
 
-    public BaseResult checkTbContent(TbUser tbUser) {
-        BaseResult baseResult = BaseResult.success();
-        if (StringUtils.isBlank(tbUser.getUsername())) {
-            baseResult = BaseResult.fail("用户不能为空");
-        } else if (StringUtils.isBlank(tbUser.getPassword())) {
-            baseResult = BaseResult.fail("密码不能为空");
-        } else if (StringUtils.isBlank(tbUser.getPhone())) {
-            baseResult = BaseResult.fail("手机不能为空");
-        } else if (!RegexpUtils.checkPhone(tbUser.getPhone())) {
-            baseResult = BaseResult.fail("手机格式错误");
-        } else if (StringUtils.isBlank(tbUser.getEmail())) {
-            baseResult = BaseResult.fail("邮箱不能为空");
-        } else if (!RegexpUtils.checkEmail(tbUser.getEmail())) {
-            baseResult = BaseResult.fail("邮箱格式错误");
-        }
-        return baseResult;
-    }
 }

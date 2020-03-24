@@ -189,14 +189,14 @@
             "data": function (row, type, val, meta) {
                 var detailUrl = "/content/detail?contentId=" + row.id;
                 var deleteUrl = "/content/delete";
+                var mes = "警告：你确定要删除";
                 return '<button onclick="app.showDetail(\'' + detailUrl + '\')" type="button" class="btn btn-sm btn-default"><i class="fa fa-search"></i>查看</button>&nbsp;&nbsp;&nbsp;' +
                     '<a href="/content/form?contentId=' + row.id + '" type="button" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>编辑</a>&nbsp;&nbsp;&nbsp;' +
-                    '<button onclick="app.deleteById(\'' + deleteUrl + '\',' + row.id + ')" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i>删除</button>';
+                    '<button onclick="app.deleteSingle(\''+deleteUrl+'\','+row.id+',\'警告：你确认要删除此内容\')" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i>删除</button>';
             }
         },
     ];
     var dataTables = app.initDataTables("/content/page", columns);
-
     function search() {
         var param = {
             "title": $('#title').val(),

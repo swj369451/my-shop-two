@@ -1,12 +1,17 @@
-package com.sm.my.shop.two.commons.persistence;
+package com.sm.my.shop.two.web.admin.abstracts;
 
 import com.sm.my.shop.two.commons.dto.PageInfo;
+import com.sm.my.shop.two.commons.persistence.BaseDao;
+import com.sm.my.shop.two.commons.persistence.BaseEntity;
+import com.sm.my.shop.two.commons.persistence.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Transactional(readOnly = true)
 public abstract class BaseServiceImpl<T extends BaseEntity,D extends BaseDao<T>> implements BaseService<T> {
 
     @Autowired
@@ -18,6 +23,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity,D extends BaseDao<T>>
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void delete(Long id) {
         dao.delete(id);
     }
@@ -28,11 +34,13 @@ public abstract class BaseServiceImpl<T extends BaseEntity,D extends BaseDao<T>>
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void update(T entity) {
         dao.update(entity);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteMulti(String[] ids) {
         dao.deleteMultiByIds(ids);
     }
