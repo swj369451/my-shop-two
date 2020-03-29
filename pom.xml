@@ -22,5 +22,7 @@
         <module>my-shop-two-web-ui</module>
         <!--api-->
         <module>my-shop-two-web-api</module>
+        <!--第三方依赖-->
+        <module>my-shop-two-external</module>
     </modules>
 </project>

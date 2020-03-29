@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="my-shop-two-commons" />
         <module name="my-shop-two-domain" />
+        <module name="my-shop-two-external" />
         <module name="my-shop-two-web-admin" />
         <module name="my-shop-two-web-api" />
         <module name="my-shop-two-web-ui" />
@@ -19,6 +20,7 @@
       <module name="my-shop-two-commons" target="1.8" />
       <module name="my-shop-two-dependencies" target="1.8" />
       <module name="my-shop-two-domain" target="1.8" />
+      <module name="my-shop-two-external" target="1.8" />
       <module name="my-shop-two-web-admin" target="1.8" />
       <module name="my-shop-two-web-api" target="1.8" />
       <module name="my-shop-two-web-ui" target="1.8" />

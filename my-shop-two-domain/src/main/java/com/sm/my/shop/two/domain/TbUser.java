@@ -13,7 +13,6 @@ import javax.validation.constraints.Pattern;
  */
 @Data
 public class TbUser extends BaseEntity{
-//    todo 1.无法使用validate
     @Length(min = 6,max = 20,message = "用户名必须介于6到20位直接")
     private String username;
 
@@ -25,6 +24,4 @@ public class TbUser extends BaseEntity{
 
     @Pattern(regexp = RegexpUtils.EMAIL,message = "邮箱格式不正确")
     private String email;
-
-
 }

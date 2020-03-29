@@ -38,8 +38,11 @@
         <lombok.version>1.16.22</lombok.version>
         <hibernate-validator.version>5.3.4.Final</hibernate-validator.version>
         <commons-fileupload.version>1.3.2</commons-fileupload.version>
+        <apache-httpclient.version>4.5.5</apache-httpclient.version>
+        <apache-commons-email.version>1.5</apache-commons-email.version>
+        <google.code-kaptcha.version>2.3</google.code-kaptcha.version>
     </properties>
-<!--dependencyManagement不会去自动下载jar包，只会管理jar包-->
+    <!--dependencyManagement不会去自动下载jar包，只会管理jar包-->
     <dependencyManagement>
         <dependencies>
 
@@ -55,9 +58,9 @@
                 <version>${spring.version}</version>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>org.springframework</groupId>-->
-                <!--<artifactId>spring-aspects</artifactId>-->
-                <!--<version>${spring.version}</version>-->
+            <!--<groupId>org.springframework</groupId>-->
+            <!--<artifactId>spring-aspects</artifactId>-->
+            <!--<version>${spring.version}</version>-->
             <!--</dependency>-->
             <!-- Spring End -->
             <!-- Test Start -->
@@ -184,10 +187,52 @@
                 <version>${lombok.version}</version>
             </dependency>
             <!-- Lombok End-->
+            <!-- Apache Http Begin -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${apache-httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+                <version>${apache-httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${apache-httpclient.version}</version>
+            </dependency>
+            <!-- Apache Http End -->
+            <!-- Apache Commons Email Begin-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-email</artifactId>
+                <version>${apache-commons-email.version}</version>
+            </dependency>
+            <!-- Apache Commons Email End -->
+            <!-- Google Code Begin-->
+            <dependency>
+                <groupId>com.google.code.kaptcha</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${google.code-kaptcha.version}</version>
+            </dependency>
+            <!-- Google Code End-->
+
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <!--使用mvn clean时将依赖的jar包安装到仓库中-->
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <!-- Compiler 插件, 设定 JDK 版本 -->
             <plugin>

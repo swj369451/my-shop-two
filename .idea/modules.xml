@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/my-shop-two-commons/my-shop-two-commons.iml" filepath="$PROJECT_DIR$/my-shop-two-commons/my-shop-two-commons.iml" />
       <module fileurl="file://$PROJECT_DIR$/my-shop-two-dependencies/my-shop-two-dependencies.iml" filepath="$PROJECT_DIR$/my-shop-two-dependencies/my-shop-two-dependencies.iml" />
       <module fileurl="file://$PROJECT_DIR$/my-shop-two-domain/my-shop-two-domain.iml" filepath="$PROJECT_DIR$/my-shop-two-domain/my-shop-two-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-shop-two-external/my-shop-two-external.iml" filepath="$PROJECT_DIR$/my-shop-two-external/my-shop-two-external.iml" />
       <module fileurl="file://$PROJECT_DIR$/my-shop-two-web-admin/my-shop-two-web-admin.iml" filepath="$PROJECT_DIR$/my-shop-two-web-admin/my-shop-two-web-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/my-shop-two-web-api/my-shop-two-web-api.iml" filepath="$PROJECT_DIR$/my-shop-two-web-api/my-shop-two-web-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/my-shop-two-web-ui/my-shop-two-web-ui.iml" filepath="$PROJECT_DIR$/my-shop-two-web-ui/my-shop-two-web-ui.iml" />

@@ -17,6 +17,44 @@
     <description></description>
 
     <dependencies>
-
+        <!-- Project Start -->
+        <dependency>
+            <groupId>com.sm</groupId>
+            <artifactId>my-shop-two-commons</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- Project End -->
+        <!-- Spring Begin -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Spring End -->
+        <!-- Servlet Begin -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <!-- Servlet End -->
+        <!-- Google Code Begin-->
+        <dependency>
+            <groupId>com.google.code.kaptcha</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
+        <!-- Google Code End-->
     </dependencies>
 </project>
